@@ -50,6 +50,9 @@ gtest3() {
 
 # ----------------------------------------------------------------------
 # Docker
+
+#docker-compose ps --service
+
 alias d-c="docker-compose"
 
 d-cdown() {
@@ -68,18 +71,17 @@ d() {
 
 # ----------------------------------------------------------------------
 # GIT
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 #git branch --show-current
 
-# gb() {
-#     cls
-#     echo "${YELLOW}git branch${NOCOLOR}"
-#     git branch "$@"
-# }
-# gbranch() {
-#     gb
-# }
+gb() {
+    cls
+    echo "${YELLOW}git branch${NOCOLOR}"
+    git branch "$@"
+}
+gbranch() {
+    gb
+}
 
 alias gch="git checkout"
 alias gcheckout="git checkout"
@@ -91,6 +93,7 @@ gcherry() {
 }
 
 gcommit() {
+    echo "${YELLOW}git commit -am ''; git push;${NOCOLOR}"
     git commit -am $1; git push;
 }
 
@@ -103,27 +106,36 @@ gdiff() {
 }
 
 
-gf="git fetch"
-alias gf="echo $gf && $gf"
-alias gfetch="git fetch"
+#gf="git fetch"
+#alias gf="echo $gf && $gf"
+#alias gfetch="git fetch"
+
+gf() {
+    cls
+    echo "${YELLOW}git fetch${NOCOLOR}"
+    git fetch
+}
+gfetch() {
+    gf
+}
 
 
-# gl() {
-#     cls
-#     echo "${YELLOW}git log --oneline${NOCOLOR}"
-#     git log --oneline
-# }
-# glog() {
-#     gl
-# }
+gl() {
+    cls
+    echo "${YELLOW}git log --oneline${NOCOLOR}"
+    git log --oneline
+}
+glog() {
+    gl
+}
 
-# gp() {
-#     echo "${YELLOW}git pull${NOCOLOR}"
-#     git pull
-# }
-# gpull() {
-#     gp
-# }
+gp() {
+    echo "${YELLOW}git pull${NOCOLOR}"
+    git pull
+}
+gpull() {
+    gp
+}
 
 gpush() {
     echo "${YELLOW}git push${NOCOLOR}"
@@ -141,10 +153,10 @@ gstatus() {
     gs
 }
 
-# gss() {
-#     echo "${YELLOW}git submodule status${NOCOLOR}"
-#     git submodule status
-# }
+gss() {
+    echo "${YELLOW}git submodule status${NOCOLOR}"
+    git submodule status
+}
 
 
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
