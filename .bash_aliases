@@ -83,8 +83,13 @@ gbranch() {
     gb
 }
 
-alias gch="git checkout"
-alias gcheckout="git checkout"
+gco() {
+    echo "${YELLOW}git checkout${NOCOLOR}"
+    git checkout
+}
+gcheckout() {
+    gco
+}
 
 #list the commits waiting to be pushed
 gcherry() {
@@ -92,9 +97,12 @@ gcherry() {
     git cherry -v
 }
 
+gc() {
+    echo "${YELLOW}git commit${NOCOLOR}"
+    git commit
+}
 gcommit() {
-    echo "${YELLOW}git commit -am ''; git push;${NOCOLOR}"
-    git commit -am $1; git push;
+    gc
 }
 
 #git diff --stat --cached origin/branchname
