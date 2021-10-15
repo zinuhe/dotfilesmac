@@ -1,0 +1,34 @@
+# https://starship.rs/config/#prompt
+# https://starship.rs/presets/#nerd-font-symbols
+
+# ~/.config/starship.toml
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[└─>](bold green)"   # The "success_symbol" segment is being set to "➜" with the color "bold green"
+
+[directory]
+truncate_to_repo = false
+truncation_length = 3
+truncation_symbol = "…/"
+
+[battery]
+full_symbol = "🔋  "
+charging_symbol = "⚡️  "
+discharging_symbol = "💀  "
+
+[[battery.display]]
+threshold = 10
+style = "bold red"
+
+[git_branch]
+symbol = " "
+truncation_length = 4
+truncation_symbol = ""
+
+[golang]
+#format = "via [🐹  $version](bold cyan) "
+format = "- [ $version](bold cyan) "
