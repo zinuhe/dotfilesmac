@@ -25,10 +25,14 @@ threshold = 10
 style = "bold red"
 
 [git_branch]
-symbol = " "
+#symbol = " "
+symbol = " "
 truncation_length = 4
 truncation_symbol = ""
 
 [golang]
 #format = "via [🐹  $version](bold cyan) "
 format = "- [ $version](bold cyan) "
+
+[python]
+format = "- [🐍 $version](yellow bold) "
