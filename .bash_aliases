@@ -31,6 +31,11 @@ alias cdrgo="cd ~/Documents/DEV/Go/goworkspace/src/github.com/zinuhe/"
 
 alias gclean="go clean"
 #Delete $GOPATH/bin and the executable in the directory if you used go build.
+gocache() {
+    go clean
+    rm -r ~/$GOPATH/bin/*
+    rm -r ~/$GOPATH/go/bin/*
+}
 
 #alias grun="go run $(find . -name '*.go' -and -not -name '*_test.go' -maxdepth 1)"
 alias grun="go run"
