@@ -29,9 +29,11 @@ alias vihosts="sudo vi /etc/hosts"
 # Golang
 alias cdrgo="cd ~/Documents/DEV/Go/goworkspace/src/github.com/zinuhe/"
 
-grun() {
-    go run $(find . -name '*.go' -and -not -name '*_test.go' -maxdepth 1)
-}
+alias gclean="go clean"
+#Delete $GOPATH/bin and the executable in the directory if you used go build.
+
+#alias grun="go run $(find . -name '*.go' -and -not -name '*_test.go' -maxdepth 1)"
+alias grun="go run"
 
 gtest() {
     echo "${YELLOW}go test ./... -cover -v${NOCOLOR}"
@@ -98,8 +100,8 @@ gcherry() {
 }
 
 gc() {
-    echo "${YELLOW}git commit${NOCOLOR}"
-    git commit
+    echo "${YELLOW}git commit $1${NOCOLOR}"
+    git commit "$@"
 }
 gcommit() {
     gc
