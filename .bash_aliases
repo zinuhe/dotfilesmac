@@ -3,14 +3,11 @@
 # ----------------------------------------------------------------------
 
 alias cls=clear          # Clear your terminal screen
-alias lsld="ls -ld */"   # List all directories in current directory in long list format
-
-lsl() {
-    cls
-    ls -l -G           # list all files starting with parameter input %1
-}
 
 alias lsla="ls -la -G"   # List all files in current directory
+
+alias lsld="ls -ld */"   # List all directories in current directory in long list format
+
 lss() {
     ls -ld $1*           # list all files starting with parameter input %1
 }
