@@ -4,7 +4,9 @@
 
 alias cls=clear          # Clear your terminal screen
 
-alias lsla="ls -la -G"   # List all files in current directory
+alias lsl="ls -l"        # List all files in current directory
+
+alias lsla="ls -la -G"   # List all files and directories (color) in current directory
 
 alias lsld="ls -ld */"   # List all directories in current directory in long list format
 
