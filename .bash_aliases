@@ -78,16 +78,35 @@ d() {
 # ----------------------------------------------------------------------
 # GIT
 
-#git branch --show-current
-
 gb() {
     cls
     echo "${YELLOW}git branch${NOCOLOR}"
-    git branch "$@"
+    git branch
 }
 gbranch() {
     gb
 }
+
+#list both local and remote branches
+gba() {
+    cls
+    echo "${YELLOW}git branch -a${NOCOLOR}"
+    git branch -a
+}
+gbrancha() {
+    gba
+}
+
+#list only remote branches
+gbr() {
+    cls
+    echo "${YELLOW}git branch -r${NOCOLOR}"
+    git branch -r
+}
+gbranchr() {
+    gbr
+}
+
 
 gco() {
     echo "${YELLOW}git checkout${NOCOLOR}"
