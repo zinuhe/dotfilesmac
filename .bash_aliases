@@ -9,7 +9,7 @@ alias lsla="ls -la -G"   # List all files and directories (color) in current dir
 alias lsd="ls -ld */"    # List all directories in current directory in long list format
 
 lss() {
-    ls -ld $1*           # list all files starting with parameter input %1
+    ls -ld -G $1*        # list all files starting with parameter input %1
 }
 
 # ----------------------------------------------------------------------
