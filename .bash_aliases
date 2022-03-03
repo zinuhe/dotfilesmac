@@ -37,6 +37,18 @@ gocache() {
 #alias grun="go run $(find . -name '*.go' -and -not -name '*_test.go' -maxdepth 1)"
 alias grun="go run"
 
+# To run golangci-lint
+glint() {
+    echo "${YELLOW}golangci-lint run${NOCOLOR}"
+    golangci-lint run
+}
+
+# To run helm linter
+ghelm() {
+    echo "${YELLOW}helm lint .${NOCOLOR}"
+    helm lint .
+}
+
 gtest() {
     echo "${YELLOW}go test ./... -cover -v${NOCOLOR}"
     go test ./... -cover -v
@@ -106,8 +118,8 @@ gbranchr() {
 }
 
 gco() {
-    echo "${YELLOW}git checkout${NOCOLOR}"
-    git checkout
+    echo "${YELLOW}git checkout $1${NOCOLOR}"
+    git checkout $1
 }
 gcheckout() {
     gco
@@ -129,17 +141,14 @@ gcommit() {
 
 #git diff --stat --cached origin/branchname
 #It shows commited files with differences.
-
 gdiff() {
     echo "${YELLOW}git diff --stat --cached origin/`git branch --show-current`${NOCOLOR}"
     git diff --stat --cached origin/`git branch --show-current`
 }
 
-
 #gf="git fetch"
 #alias gf="echo $gf && $gf"
 #alias gfetch="git fetch"
-
 gf() {
     cls
     echo "${YELLOW}git fetch${NOCOLOR}"
@@ -148,7 +157,6 @@ gf() {
 gfetch() {
     gf
 }
-
 
 gl() {
     cls
@@ -216,4 +224,3 @@ alias sc="source ~/.zshrc"
 
 #alias abc="find . -type d -depth 1 -exec echo ls -la;"
 #find . -type d -depth 1 -exec echo git --git-dir={}/.git --work-tree=$PWD/{} status \;
-
