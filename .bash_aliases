@@ -24,8 +24,6 @@ alias vihosts="sudo vi /etc/hosts"
 
 # ----------------------------------------------------------------------
 # Golang
-alias cdrgo="cd ~/Documents/DEV/Go/goworkspace/src/github.com/zinuhe/"
-
 alias gclean="go clean"
 #Delete $GOPATH/bin and the executable in the directory if you used go build.
 gocache() {
@@ -122,7 +120,7 @@ gco() {
     git checkout $1
 }
 gcheckout() {
-    gco
+    gco $1
 }
 
 #list the commits waiting to be pushed
@@ -204,6 +202,11 @@ gsgb() {
     git submodule foreach 'git branch'
 }
 
+# forget to create a new branch, and made all your changes in the wrong branch?
+# Moves all your changes to your newly created branch.
+git switch -c "new_branch"
+
+
 # ----------------------------------------------------------------------
 # Brew
 alias bupd="brew update"
@@ -218,6 +221,7 @@ alias ec="subl ~/.zshrc"
 
 # source $HOME/.zshrc
 alias sc="source ~/.zshrc"
+# unalias alias-name
 
 # ----------------------------------------------------------------------
 # Testing zone
