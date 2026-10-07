@@ -239,7 +239,27 @@ gsgb() {
 
 
 # ----------------------------------------------------------------------
-# Ghostty
+# Terminal tab customization (Ghostty + kitty + WezTerm + iTerm2, auto-detected)
+
+# sends an iTerm2/WezTerm-compatible OSC 1337 SetUserVar, used by WezTerm's
+# format-tab-title handler in ~/.config/wezterm/wezterm.lua to color a tab
+_wezterm_set_user_var() {
+    local b64
+    b64=$(printf '%s' "$2" | base64 | tr -d '\n')
+    printf '\033]1337;SetUserVar=%s=%s\007' "$1" "$b64"
+}
+
+# sets the tab/window chrome color in iTerm2 (OSC 6, native feature — only
+# colors the tab bar, never the terminal content background)
+_iterm_set_tab_color() {
+    local hex="${1#\#}"
+    local r=$((16#${hex:0:2}))
+    local g=$((16#${hex:2:2}))
+    local b=$((16#${hex:4:2}))
+    printf '\033]6;1;bg;red;brightness;%d\007' "$r"
+    printf '\033]6;1;bg;green;brightness;%d\007' "$g"
+    printf '\033]6;1;bg;blue;brightness;%d\007' "$b"
+}
 
 # curated palette of eye-friendly colors, usable by name in tabcolor/tabcolors
 typeset -a TABCOLOR_NAMES=(
@@ -267,20 +287,44 @@ typeset -A TABCOLOR_LABELS=(
 )
 
 # set the current tab's background color, e.g. tabcolor blue1 or tabcolor "#1e3a5f"
+# works in kitty (remote control), WezTerm (user var read by format-tab-title),
+# iTerm2 (native OSC 6 tab color) and Ghostty/other xterm-like terminals (OSC 11)
 tabcolor() {
     local input="${(L)*}"
     local hex="${TABCOLOR_PALETTE[$input]:-$*}"
-    echo -ne "\e]11;$hex\a"
+    if [[ -n "$KITTY_WINDOW_ID" ]]; then
+        kitty @ set-tab-color active_bg="$hex" 2>/dev/null
+    elif [[ -n "$WEZTERM_PANE" ]]; then
+        _wezterm_set_user_var tabcolor "$hex"
+    elif [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+        _iterm_set_tab_color "$hex"
+    else
+        echo -ne "\e]11;$hex\a"
+    fi
 }
 
 # reset the current tab's background color to the config default
 tabcolorreset() {
-    echo -ne "\e]111\a"
+    if [[ -n "$KITTY_WINDOW_ID" ]]; then
+        kitty @ set-tab-color active_bg=NONE 2>/dev/null
+    elif [[ -n "$WEZTERM_PANE" ]]; then
+        _wezterm_set_user_var tabcolor ""
+    elif [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+        printf '\033]6;1;bg;*;default\007'
+    else
+        echo -ne "\e]111\a"
+    fi
 }
 
 # set the current tab's title, e.g. tabtitle "my project"
 tabtitle() {
-    echo -ne "\e]0;$1\a"
+    if [[ -n "$KITTY_WINDOW_ID" ]]; then
+        kitty @ set-tab-title "$1" 2>/dev/null
+    elif [[ -n "$WEZTERM_PANE" ]]; then
+        wezterm cli set-tab-title "$1" 2>/dev/null
+    else
+        echo -ne "\e]0;$1\a"
+    fi
 }
 
 # preview the curated palette rendered with its real color: swatch, full name, hex, short name
@@ -302,7 +346,14 @@ alias bupd="brew update"
 alias bupg="brew upgrade"
 alias bo="brew outdated"
 alias bl="brew list --version"
+alias brew-apps='HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy claude gitkraken obsidian slack visual-studio-code iterm2 cursor figma notion chatgpt github ghostty mongodb-compass beyond-compare kitty wezterm sublime-text'
+alias brew-up="brew update && brew outdated --cask --greedy --verbose"
 
+# Update one or multiple apps, passing the name
+brew-app() {
+  [ -z "$1" ] && { echo "Uso: brew-app <cask> [cask...]"; return 1; }
+  HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy "$@"
+}
 # ----------------------------------------------------------------------
 # Others
 # open ~/.zshrc in using the default editor specified in $EDITOR
