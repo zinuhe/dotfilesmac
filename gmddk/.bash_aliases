@@ -346,8 +346,33 @@ alias bupd="brew update"
 alias bupg="brew upgrade"
 alias bo="brew outdated"
 alias bl="brew list --version"
-alias brew-apps='HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy claude gitkraken obsidian slack visual-studio-code iterm2 cursor figma notion chatgpt github ghostty mongodb-compass beyond-compare kitty wezterm sublime-text'
+
+# Only check for updates but doesn't install anything -- updates the list
 alias brew-up="brew update && brew outdated --cask --greedy --verbose"
+
+# Only check the formulas
+alias brew-formulas='brew update && brew upgrade --formula && brew cleanup'
+
+# Update all of them at the same time
+brew-apps() {
+  local apps=(
+    beyond-compare
+    claude
+    dbeaver-community
+    figma
+    github
+    gitkraken
+    iterm2
+    mongodb-compass
+    notion
+    obsidian
+    postman
+    slack
+    sublime-text
+    visual-studio-code
+  )
+  HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy "${apps[@]}"
+}
 
 # Update one or multiple apps, passing the name
 brew-app() {
