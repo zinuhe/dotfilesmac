@@ -30,7 +30,7 @@ cdgr() {
 
 
 alias cathosts="cat /etc/hosts"
-alias vihosts="sudo vi /etc/hosts" 
+alias vihosts="sudo vi /etc/hosts"
 
 # ----------------------------------------------------------------------
 # Python
@@ -370,6 +370,7 @@ brew-apps() {
     slack
     sublime-text
     visual-studio-code
+    zed
   )
   HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy "${apps[@]}"
 }
