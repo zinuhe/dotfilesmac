@@ -1,0 +1,9 @@
+[
+  {
+    "context": "Workspace || Pane || Editor || Terminal",
+    "bindings": {
+      "ctrl-pagedown": "pane::ActivateNextItem",
+      "ctrl-pageup": "pane::ActivatePreviousItem"
+    }
+  }
+]
