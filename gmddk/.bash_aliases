@@ -8,6 +8,7 @@ alias cls=clear          # Clear your terminal screen
 alias lsl="ls -l -G"     # List all files in current directory
 alias lsla="ls -la -G"   # List all files and directories (color) in current directory
 alias lsd="ls -ld */"    # List all directories in current directory in long list format
+alias lsdh="ls -ld .*/ */"    # List all directories in current directory in long list format, included hidden
 
 # list all files/directories starting with the given prefix
 lss() {
@@ -359,7 +360,45 @@ brew-apps() {
     visual-studio-code
     zed
   )
-  HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy "${apps[@]}"
+  brew update --quiet >/dev/null 2>&1
+
+  local -a lines approved
+  lines=("${(@f)$(brew outdated --cask --greedy --verbose "${apps[@]}")}")
+  lines=("${lines[@]:#}")
+
+  if (( ${#lines} == 0 )); then
+    echo "Everything is up to date."
+    return 0
+  fi
+
+  echo "Updates available (${#lines}):"
+  echo
+  local line app answer all=0
+  for line in "${lines[@]}"; do
+    app=${line%% *}
+    echo "$line"
+    if (( all )); then
+      approved+=("$app")
+      continue
+    fi
+    read -k 1 "answer?Update $app? [y/N/a=all/q=quit] "
+    echo
+    case "$answer" in
+      y|Y) approved+=("$app") ;;
+      a|A) approved+=("$app"); all=1 ;;
+      q|Q) break ;;
+    esac
+  done
+
+  if (( ${#approved} == 0 )); then
+    echo
+    echo "Nothing selected. No changes made."
+    return 0
+  fi
+
+  echo
+  echo "Updating: ${approved[*]}"
+  HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy "${approved[@]}"
 }
 
 # Update one or multiple apps, passing the name
