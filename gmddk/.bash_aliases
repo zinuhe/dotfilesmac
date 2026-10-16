@@ -169,10 +169,6 @@ gdiff() {
     git diff --stat --cached origin/`git branch --show-current`
 }
 
-#gf="git fetch"
-#alias gf="echo $gf && $gf"
-#alias gfetch="git fetch"
-
 # fetch changes from remote
 gf() {
     cls
@@ -239,15 +235,7 @@ gsgb() {
 
 
 # ----------------------------------------------------------------------
-# Terminal tab customization (Ghostty + kitty + WezTerm + iTerm2, auto-detected)
-
-# sends an iTerm2/WezTerm-compatible OSC 1337 SetUserVar, used by WezTerm's
-# format-tab-title handler in ~/.config/wezterm/wezterm.lua to color a tab
-_wezterm_set_user_var() {
-    local b64
-    b64=$(printf '%s' "$2" | base64 | tr -d '\n')
-    printf '\033]1337;SetUserVar=%s=%s\007' "$1" "$b64"
-}
+# Terminal tab customization (iTerm2, auto-detected)
 
 # sets the tab/window chrome color in iTerm2 (OSC 6, native feature — only
 # colors the tab bar, never the terminal content background)
@@ -287,8 +275,7 @@ typeset -A TABCOLOR_LABELS=(
 )
 
 # set the current tab's background color, e.g. tabcolor blue1 or tabcolor "#1e3a5f"
-# works in kitty (remote control), WezTerm (user var read by format-tab-title),
-# iTerm2 (native OSC 6 tab color) and Ghostty/other xterm-like terminals (OSC 11)
+# iTerm2 (native OSC 6 tab color)
 tabcolor() {
     local input="${(L)*}"
     local hex="${TABCOLOR_PALETTE[$input]:-$*}"
@@ -383,11 +370,11 @@ brew-app() {
 # ----------------------------------------------------------------------
 # Others
 # open ~/.zshrc in using the default editor specified in $EDITOR
-alias ec="subl ~/.zshrc"
+alias ec="zed ~/.zshrc"
 
 # source ~/.zshrc
 alias sc="source ~/.zshrc"
-# unalias alias-name
+
 
 # list all aliases and functions defined in this file, with descriptions
 al() {
@@ -417,6 +404,3 @@ al() {
 
 # ----------------------------------------------------------------------
 # Testing zone
-
-#alias abc="find . -type d -depth 1 -exec echo ls -la;"
-#find . -type d -depth 1 -exec echo git --git-dir={}/.git --work-tree=$PWD/{} status \;
