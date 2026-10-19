@@ -350,6 +350,7 @@ brew-apps() {
     figma
     github
     gitkraken
+    hammerspoon
     iterm2
     mongodb-compass
     notion
@@ -399,6 +400,11 @@ brew-apps() {
   echo
   echo "Updating: ${approved[*]}"
   HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy "${approved[@]}"
+  local rc=$?
+
+  # Recalcula el contador de actualizaciones del prompt (starship custom.brew)
+  brew-outdated-count --refresh
+  return $rc
 }
 
 # Update one or multiple apps, passing the name
@@ -408,12 +414,6 @@ brew-app() {
 }
 # ----------------------------------------------------------------------
 # Others
-# open ~/.zshrc in using the default editor specified in $EDITOR
-alias ec="zed ~/.zshrc"
-
-# source ~/.zshrc
-alias sc="source ~/.zshrc"
-
 
 # list all aliases and functions defined in this file, with descriptions
 al() {
@@ -441,5 +441,18 @@ al() {
     ' ~/.bash_aliases
 }
 
+
 # ----------------------------------------------------------------------
-# Testing zone
+# Prompt (starship)
+# El prompt muestra " — 🔄 (N)" después de la región de AWS, donde N es el número de
+# apps de la lista de brew-apps con actualizaciones
+# se recalcula solo cada hora y al final de brew-apps.
+# Recalcula ahora el contador de actualizaciones del prompt
+alias brew-refresh="brew-outdated-count --refresh"
+
+
+# open ~/.zshrc in using the default editor specified in $EDITOR
+alias ec="zed ~/.zshrc"
+
+# source ~/.zshrc
+alias sc="source ~/.zshrc"
