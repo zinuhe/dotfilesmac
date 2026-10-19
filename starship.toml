@@ -1,38 +1,27 @@
-# https://starship.rs/config/#prompt
-# https://starship.rs/presets/#nerd-font-symbols
-
-# ~/.config/starship.toml
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
 
 # Inserts a blank line between shell prompts
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[└─>](bold green)"   # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Replace the '❯' symbol in the prompt with '➜'
+[character] # The name of the module we are configuring is 'character'
+success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
 
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true
+
+# Muestra solo las ultimas 2 carpetas del path
 [directory]
+truncation_length = 2
 truncate_to_repo = false
-truncation_length = 3
-truncation_symbol = "…/"
+truncation_symbol = '…/'
 
-[battery]
-full_symbol = "🔋  "
-charging_symbol = "⚡️  "
-discharging_symbol = "💀  "
-
-[[battery.display]]
-threshold = 10
-style = "bold red"
-
-[git_branch]
-#symbol = " "
-symbol = " "
-truncation_length = 4
-truncation_symbol = ""
-
-[golang]
-#format = "via [🐹  $version](bold cyan) "
-format = "- [ $version](bold cyan) "
-
-[python]
-format = "- [🐍 $version](yellow bold) "
+# Número de apps de brew-apps con actualizaciones: " — 🔄 (N)" (oculto si es 0)
+[custom.brew]
+when = '[ -n "$($HOME/.local/bin/brew-outdated-count)" ]'
+command = 'cat "${XDG_CACHE_HOME:-$HOME/.cache}/brew-outdated-count"'
+shell = ["sh"]
+format = '[— 🔄 \($output\)]($style) '
+style = "bold yellow"
