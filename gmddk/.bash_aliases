@@ -5,6 +5,10 @@
 alias ..="cd .."
 alias cls=clear          # Clear your terminal screen
 
+# Colores de ls -G (macOS). El primer par es el de las carpetas: "Dx" = amarillo en negrita
+# (antes "ex" = azul, que se confundía con el fondo). El resto son los valores por defecto.
+export LSCOLORS="Dxfxcxdxbxegedabagacad"
+
 alias lsl="ls -l -G"     # List all files in current directory
 alias lsla="ls -la -G"   # List all files and directories (color) in current directory
 alias lsd="ls -ld */"    # List all directories in current directory in long list format
@@ -449,6 +453,10 @@ al() {
 # se recalcula solo cada hora y al final de brew-apps.
 # Recalcula ahora el contador de actualizaciones del prompt
 alias brew-refresh="brew-outdated-count --refresh"
+
+# ----------------------------------------------------------------------
+# Raspberry
+alias rb="ssh jimmys@raspberrypi.local"
 
 
 # open ~/.zshrc in using the default editor specified in $EDITOR
