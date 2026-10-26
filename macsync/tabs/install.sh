@@ -1,10 +1,13 @@
 #!/bin/bash
 # Tabs: Ctrl+PgDn = siguiente, Ctrl+PgUp = anterior, en Zed, VSCode, Obsidian e iTerm2.
 # Zed ademas recibe su settings.json (incluye el color del tab activo).
+# Tambien enlaza la configuracion del prompt Starship (starship/starship.toml)
+# y la de Hammerspoon para los botones del mouse (hammerspoon/init.lua).
 # Uso: ./install.sh [ruta-del-vault-de-obsidian]   (default: ~/Documents/remote)
 set -euo pipefail
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$DIR/.." && pwd)"
 VAULT="${1:-$HOME/Documents/remote}"
 STAMP="$(date +%Y%m%d-%H%M%S)"
 
@@ -24,6 +27,12 @@ running() { pgrep -xq "$1"; }
 link "$DIR/zed-keymap.json" "$HOME/.config/zed/keymap.json"
 link "$DIR/zed-settings.json" "$HOME/.config/zed/settings.json"
 link "$DIR/vscode-keybindings.json" "$HOME/Library/Application Support/Code/User/keybindings.json"
+
+# Starship: el prompt de la terminal (requiere `brew install starship`)
+link "$ROOT/starship/starship.toml" "$HOME/.config/starship.toml"
+
+# Hammerspoon: botones laterales del mouse -> atajos (requiere `brew install --cask hammerspoon`)
+link "$ROOT/hammerspoon/init.lua" "$HOME/.hammerspoon/init.lua"
 
 # Obsidian: solo se parchean los dos hotkeys de tabs dentro del vault (conserva los demas)
 HOTKEYS="$VAULT/.obsidian/hotkeys.json"
