@@ -225,9 +225,6 @@ gundo() {
     git reset --soft HEAD~1
 }
 
-
-alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
-
 # list branches inside each git submodule
 gsgb() {
     echo "${YELLOW}git submodule foreach 'git branch'${NOCOLOR}"
@@ -279,6 +276,19 @@ typeset -A TABCOLOR_LABELS=(
     "gray1"   "Gris azulado"
 )
 
+# preview the curated palette rendered with its real color: swatch, full name, hex, short name
+tabcolors() {
+    local name label hex r g b
+    for name in "${TABCOLOR_NAMES[@]}"; do
+        hex="${TABCOLOR_PALETTE[$name]}"
+        label="${TABCOLOR_LABELS[$name]}"
+        r=$((16#${hex:1:2}))
+        g=$((16#${hex:3:2}))
+        b=$((16#${hex:5:2}))
+        printf "\e[48;2;%d;%d;%dm    \e[0m  %-18s %-10s %s\n" "$r" "$g" "$b" "$label" "$hex" "$name"
+    done
+}
+
 # set the current tab's background color, e.g. tabcolor blue1 or tabcolor "#1e3a5f"
 # iTerm2 (native OSC 6 tab color)
 tabcolor() {
@@ -319,28 +329,9 @@ tabtitle() {
     fi
 }
 
-# preview the curated palette rendered with its real color: swatch, full name, hex, short name
-tabcolors() {
-    local name label hex r g b
-    for name in "${TABCOLOR_NAMES[@]}"; do
-        hex="${TABCOLOR_PALETTE[$name]}"
-        label="${TABCOLOR_LABELS[$name]}"
-        r=$((16#${hex:1:2}))
-        g=$((16#${hex:3:2}))
-        b=$((16#${hex:5:2}))
-        printf "\e[48;2;%d;%d;%dm    \e[0m  %-18s %-10s %s\n" "$r" "$g" "$b" "$label" "$hex" "$name"
-    done
-}
 
 # ----------------------------------------------------------------------
 # Brew
-alias bupd="brew update"
-alias bupg="brew upgrade"
-alias bo="brew outdated"
-alias bl="brew list --version"
-
-# Only check for updates but doesn't install anything -- updates the list
-alias brew-up="brew update && brew outdated --cask --greedy --verbose"
 
 # Only check the formulas
 alias brew-formulas='brew update && brew upgrade --formula && brew cleanup'
@@ -411,11 +402,6 @@ brew-apps() {
   return $rc
 }
 
-# Update one or multiple apps, passing the name
-brew-app() {
-  [ -z "$1" ] && { echo "Uso: brew-app <cask> [cask...]"; return 1; }
-  HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications" brew upgrade --cask --greedy "$@"
-}
 # ----------------------------------------------------------------------
 # Others
 
@@ -456,7 +442,7 @@ alias brew-refresh="brew-outdated-count --refresh"
 
 # ----------------------------------------------------------------------
 # Raspberry
-alias rb="ssh jimmys@raspberrypi.local"
+alias rb="ssh jimmys@raspberry.local"
 
 
 # open ~/.zshrc in using the default editor specified in $EDITOR
