@@ -239,8 +239,8 @@ gsgb() {
 # ----------------------------------------------------------------------
 # Terminal tab customization (iTerm2, auto-detected)
 
-# sets the tab/window chrome color in iTerm2 (OSC 6, native feature — only
-# colors the tab bar, never the terminal content background)
+# uses OSC 6, a native iTerm2 feature: it only colors the tab bar, never the terminal content background
+# helper for tabcolor: sets the current tab color from a hex code, e.g. _iterm_set_tab_color "#2d4159"
 _iterm_set_tab_color() {
     local hex="${1#\#}"
     local r=$((16#${hex:0:2}))
@@ -352,7 +352,6 @@ brew-apps() {
     obsidian
     postman
     slack
-    sublime-text
     visual-studio-code
     zed
   )
@@ -407,28 +406,37 @@ brew-apps() {
 
 # list all aliases and functions defined in this file, with descriptions
 al() {
-    echo "${YELLOW}--- Aliases ---${NOCOLOR}"
-    alias
-    echo ""
-    echo "${YELLOW}--- Functions ---${NOCOLOR}"
-    awk '
-        /^#[[:space:]]*-+[[:space:]]*$/ { comment=""; next }
-        /^#/ {
-            c = $0
-            sub(/^#[ \t]*/, "", c)
-            comment = c
-            next
-        }
-        /^[a-zA-Z_-]+\(\)/ {
-            name = $0
-            sub(/\(\).*/, "", name)
-            if (comment != "") print name " -- " comment
-            else print name
-            comment = ""
-            next
-        }
-        { comment = "" }
-    ' ~/.bash_aliases
+    local alias_color="$LIGHTCYAN" func_color="$LIGHTGREEN"
+    printf '%b%s%b  %b%s%b\n\n' "$alias_color" "alias" "$NOCOLOR" "$func_color" "function" "$NOCOLOR"
+    {
+        # aliases: "name=value" -> name<TAB>alias<TAB>line
+        alias | awk '{ i = index($0, "="); print substr($0, 1, i - 1) "\talias\t" $0 }'
+        # functions: "name -- comment" -> name<TAB>function<TAB>line
+        awk '
+            /^#[[:space:]]*-+[[:space:]]*$/ { comment=""; next }
+            /^#/ {
+                c = $0
+                sub(/^#[ \t]*/, "", c)
+                comment = c
+                next
+            }
+            /^[a-zA-Z_-]+\(\)/ {
+                name = $0
+                sub(/\(\).*/, "", name)
+                if (comment != "") print name " -- " comment
+                else print name
+                comment = ""
+                next
+            }
+            { comment = "" }
+        ' ~/.bash_aliases | awk '{ n = $0; sub(/ -- .*/, "", n); print n "\tfunction\t" $0 }'
+    } | sort -f -t $'\t' -k1,1 | while IFS=$'\t' read -r name kind line; do
+        if [[ $kind == alias ]]; then
+            printf '%b%s%b\n' "$alias_color" "$line" "$NOCOLOR"
+        else
+            printf '%b%s%b\n' "$func_color" "$line" "$NOCOLOR"
+        fi
+    done
 }
 
 
